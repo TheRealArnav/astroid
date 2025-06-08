@@ -3,9 +3,14 @@ import random
 import time
 pygame.init()
 pygame.font.init()
-
-screen = pygame.display.set_mode((800,800))
+HEIGHT = 800
+WIDTH = 800
+screen = pygame.display.set_mode((HEIGHT,WIDTH))
 pygame.display.set_caption("ASTROID DESTROYER")
+
+
+fps = 60
+clock = pygame.time.Clock()
 
 
 small_astroid = pygame.image.load("C:/Pygame2/images/astroid.png")
@@ -34,11 +39,11 @@ class Rocket(pygame.sprite.Sprite):
         screen.blit(self.rotated_image,self.rotated_rect)
     def turnleft(self):
         self.angle = self.angle + 6
-        self.x = self.x - self.speed
+
         self.updaterotation()
     def turnright(self):
         self.angle = self.angle - 6
-        self.x = self.x + self.speed
+    
         self.updaterotation()
     def forward(self):
         self.y = self.y - self.speed
@@ -46,6 +51,36 @@ class Rocket(pygame.sprite.Sprite):
         self.y = self.y + self.speed
 
 
+class Astroid(pygame.sprite.Sprite):
+    def __init__(self,dir,size):
+        super().__init__()
+        self.dir = dir
+        self.size = size
+        self.image = pygame.image.load("C:/Pygame2/images/astroid.png")
+    def draw(self):
+
+        if self.size == 1:
+            self.image = small_astroid
+        if self.size == 2:
+            self.image = medium_astroid
+        if self.size == 3:
+            self.image = large_astroid
+
+        
+        if self.dir == "top":
+            self.y = -15
+            self.x = random.randint(0,WIDTH)
+        if self.dir == "bottom":
+            self.y = 815
+            self.x = random.randint(0,WIDTH)
+        if self.dir == "left":
+            self.x = -15
+            self.y = random.randint(0,HEIGHT)
+        if self.dir == "right":
+            self.x = 815 
+            self.y = random.randint(0,HEIGHT)
+        screen.blit(self.image,(self.x,self.y))
+        
 
 
 
@@ -53,12 +88,24 @@ class Rocket(pygame.sprite.Sprite):
 rocket = Rocket(400,400)
 
 
-
+astroidgroup = pygame.sprite.Group()
 
 
 
 run = True
 while run:
+    clock.tick(fps)
+    for i in range(30):
+        size = random.randint(1,3)
+        direclist = ["top","bottom","right","left"]
+        y = random.randint(0,3)
+        direction = direclist[y]
+        astroid = Astroid(direction,size)
+        astroid.draw()
+        astroidgroup.add(astroid)
+        pygame.display.update()
+
+
     screen.blit(background,(0,0))
     rocket.draw()
     keys = pygame.key.get_pressed()
