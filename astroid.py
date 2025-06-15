@@ -32,12 +32,13 @@ class Bullet():
         self.speed = 10
         self.dx = math.sin(angle)
         self.dy = math.cos(angle)
+        bullet = pygame.Rect(self.x,self.y,5,20)
     def move(self):
         self.y = self.y - (self.dy * self.speed)
         self.x = self.x - (self.dx * self.speed)
     def draw(self):
-        pygame.draw.rect(screen,"yellow",(self.x,self.y,5,20))
-
+        screen.blit(screen,bullet)
+            
         
 
 
@@ -99,6 +100,9 @@ class Astroid(pygame.sprite.Sprite):
         if self.dir == "right":
             self.x = 715 
             self.y = random.randint(0,HEIGHT)
+
+        self.rect = self.image.get_rect()
+        
     def draw(self):      
 
         screen.blit(self.image,(self.x,self.y))
@@ -140,6 +144,8 @@ for i in range(10):
         
 bulletlist = []
 
+
+ 
 run = True
 while run:
     clock.tick(fps)
@@ -149,7 +155,7 @@ while run:
         astroid.draw()
         pygame.display.update()
         
-        
+    
 
     screen.blit(background,(0,0))
     rocket.draw()
@@ -179,4 +185,5 @@ while run:
     for bullet in bulletlist:
         bullet.draw()
         bullet.move()
+        
     pygame.display.update()
